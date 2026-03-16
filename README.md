@@ -7,6 +7,7 @@ out there understand c++ a little bit more.<br/>
 ### Programs
 
 1. **RatNum.cpp**<br/>
+
 Takes as input two integers for each of the two rationals that the computation in going to be done to.<br/>
 The available computations are:
 - Addition
@@ -25,7 +26,8 @@ The Helper Functions go as follows:
 - Save operation result
   - Saves result in a vector for future use (in a later version).
 
-2. **Date.cpp**<br/>
+1. **Date.cpp**<br/>
+
 Takes as input from the code (since i have no interface yet) a date inputted by the user.<br/>
 Then using that date you can apply one of the many function that i have created as follows:
 - add_day()
@@ -33,19 +35,21 @@ Then using that date you can apply one of the many function that i have created 
 - add_year()
 - next_workday()
 - week_of_year()
-<br/>
-Also there is a set of helper function to help calculate the above results.<br/>
-These go as follows:
 - has_30d()
+  - Helper Function that returns a boolean value to check if that month has 30 days.
 - has_31d()
+  - Helper Function that returns a boolean value to check if that month has 31 days.
 - leap_year()
+  - Returns a boolean value to check if the year is a leap year.
 - day_name()
-<br/>
-There are also the functions:
+  - Returns the name of the day from the date given.
 - year_code()
+  - Used for the day_name() algorithm
 - month_code()
+  - Used for the day_name() algorithm
 - cent_code()
-<br/>
+  - Used for the day_name() algorithm</br>
+
 These are used more for the computation of day_name() and are based on a day name algorithm.<br/>
 The description of each function is going to be added later on..(In a later version).
 
