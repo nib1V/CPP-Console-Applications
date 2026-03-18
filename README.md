@@ -26,7 +26,10 @@ The Helper Functions go as follows:
 - Save operation result
   - Saves result in a vector for future use (in a later version).
 
-1. **Date.cpp**<br/>
+</br>
+<br/>
+
+2. **Date.cpp**
 
 Takes as input from the code (since i have no interface yet) a date inputted by the user.<br/>
 Then using that date you can apply one of the many function that i have created as follows:
