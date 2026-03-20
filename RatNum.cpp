@@ -6,7 +6,7 @@ class RatNum{
     int numerator;
     int denominator;
 public:
-    RatNum():numerator(1), denominator(1){}
+    RatNum():numerator(0), denominator(1){}
     RatNum(int, int);
     int num(){return numerator;}
     int den(){return denominator;}
@@ -24,15 +24,52 @@ void RatNum::print_d()
 {
     double result = (double)numerator/denominator;
     cout << endl << "The result of the rational number is:" << endl;
-    cout << result << endl;
+    cout << setprecision(8) << result << endl;
 }
 
 void RatNum::print_r()
 {
+    int flag = 0;
+    if (numerator < 0)
+    {
+        flag = 1;
+    }
+    if (denominator < 0)
+    {
+        if (flag == 1) 
+        {
+            flag = 0;
+        }
+        else
+        {
+            flag = 1;
+        }
+    }
     cout << endl << "Your Rational Number is:" << endl;
-    cout << numerator << endl
-         << "--" << endl
-         << denominator << endl;
+    if (flag == 1)
+    {
+        cout << "  " << abs(numerator) << endl
+             << "- " << "--" << endl
+             << "  " << abs(denominator) << endl;
+    }
+    else
+    {
+        cout << abs(numerator) << endl
+             << "--" << endl
+             << abs(denominator) << endl;
+    }
+    
+}
+
+int find_gcd(int num, int den)
+{
+    while(den != 0)
+    {
+        int temp = den;
+        den = num % den;
+        num = temp;
+    }
+    return num;
 }
 
 RatNum operator+(RatNum& num1, RatNum& num2)
@@ -40,13 +77,20 @@ RatNum operator+(RatNum& num1, RatNum& num2)
     if (num1.den() == num2.den())
     {
         int nnum = num1.num() + num2.num();
-        RatNum result(nnum, num1.den());
+        int nden = num1.den();
+        int gcd = find_gcd(nnum, nden);
+        nnum /= gcd;
+        nden /= gcd;
+        RatNum result(nnum, nden);
         return result;
     }
     else 
     {
         int nnum = (num1.num() * num2.den()) + (num2.num() * num1.den());
         int nden = (num1.den() * num2.den());
+        int gcd = find_gcd(nnum, nden);
+        nnum /= gcd;
+        nden /= gcd;
         RatNum result(nnum, nden);
         return result;
     }
@@ -57,13 +101,20 @@ RatNum operator-(RatNum& num1, RatNum& num2)
     if (num1.den() == num2.den())
     {
         int nnum = num1.num() - num2.num();
-        RatNum result(nnum, num1.den());
+        int nden = num1.den();
+        int gcd = find_gcd(nnum, nden);
+        nnum /= gcd;
+        nden /= gcd;
+        RatNum result(nnum, nden);
         return result;
     }
     else
     {
         int nnum = (num1.num() * num2.den()) - (num2.num() * num1.den());
         int nden = (num1.den() * num2.den());
+        int gcd = find_gcd(nnum, nden);
+        nnum /= gcd;
+        nden /= gcd;
         RatNum result(nnum, nden);
         return result;
     }
@@ -73,6 +124,9 @@ RatNum operator*(RatNum& num1, RatNum& num2)
 {
     int nres = num1.num() * num2.num();
     int dres = num1.den() * num2.den();
+    int gcd = find_gcd(nres, dres);
+    nres /= gcd;
+    dres /= gcd;
     RatNum result(nres, dres);
     return result;
 }
@@ -82,6 +136,9 @@ RatNum operator/(RatNum& num1, RatNum& num2)
     int nres = num1.num() * num2.den();
     if(num2.num() == 0) error("\nCan't divide because the numerator of the second number is 0");
     int dres = num1.den() * num2.num();
+    int gcd = find_gcd(nres, dres);
+    nres /= gcd;
+    dres /= gcd;
     RatNum result(nres, dres);
     return result;
 }
