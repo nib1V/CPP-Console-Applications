@@ -22,6 +22,7 @@ public:
     void add_day(int n);
     void add_month(int n);
     void add_year(int n);
+    void daytoday();
     void next_workday();
     void week_of_year();
     bool has_30d();
@@ -123,7 +124,8 @@ Dd Date::day_name()
     return Dd(sum);
 }
 
-Month operator+(Month& mon, int n) {
+Month operator+(Month& mon, int n)
+{
     int temp = mon;
     temp = temp + n;
     if(temp > 12)
@@ -132,6 +134,49 @@ Month operator+(Month& mon, int n) {
         return Month(temp);
     }
     return Month(temp);
+}
+
+string day_select(int day_new)
+{
+    string Dy = " ";
+    switch (day_new){
+        case 0: Dy = "Saturday"; break;
+        case 1: Dy = "Sunday"; break;
+        case 2: Dy = "Monday"; break;
+        case 3: Dy = "Tuesday"; break;
+        case 4: Dy = "Wednesday"; break;
+        case 5: Dy = "Thursday"; break;
+        case 6: Dy = "Friday"; break;
+    }
+    return Dy;
+}
+
+string month_select(int month_new)
+{
+    string Mm = " ";
+    switch (month_new) {
+    case 1: Mm = "January"; break;
+    case 2: Mm = "February"; break;
+    case 3: Mm = "March"; break;
+    case 4: Mm = "April"; break;
+    case 5: Mm = "May"; break;
+    case 6: Mm = "June"; break;
+    case 7: Mm = "July"; break;
+    case 8: Mm = "August"; break;
+    case 9: Mm = "September"; break;
+    case 10: Mm = "Octomber"; break;
+    case 11: Mm = "November"; break;
+    case 12: Mm = "December"; break;
+    }
+    return Mm;
+    
+}
+
+void  Date::daytoday()
+{
+    string Mm = month_select(m);
+    string Dy = day_select(day_name());
+    cout << "Today is " << Dy << " the " << d << "th " << Mm << " of " << y << endl;
 }
 
 void Date::add_day(int n) 
@@ -194,12 +239,17 @@ void Date::next_workday()
     Month month_new = m;
     int year_new = y;
     string Dy = " ";
+    int offset = 0;
     if(day_name() == 0 || day_name() == 1 || day_name() == 6)
     {
         Dy = "Monday";
+        if (day_name() == 0) offset = 2;
+        if (day_name() == 1) offset = 1;
+        if (day_name() == 6) offset = 3;
     }
     else
     {
+        offset = 1;
         int temp = day_name();
         if(d + 1 > 30 && has_30d())
         {
@@ -228,32 +278,12 @@ void Date::next_workday()
             temp++;
             day_new = Dd(temp);
         }
-        switch (day_new){
-        case 2: Dy = "Monday"; break;
-        case 3: Dy = "Tuesday"; break;
-        case 4: Dy = "Wednesday"; break;
-        case 5: Dy = "Thursday"; break;
-        case 6: Dy = "Friday"; break;
-        }
         if (day_new == 1 || day_new == 0) error("Something went wrong...");
+        Dy = day_select(day_new);
     }
-    string Mm = " ";
-    switch (month_new) {
-    case 1: Mm = "January"; break;
-    case 2: Mm = "February"; break;
-    case 3: Mm = "March"; break;
-    case 4: Mm = "April"; break;
-    case 5: Mm = "May"; break;
-    case 6: Mm = "June"; break;
-    case 7: Mm = "July"; break;
-    case 8: Mm = "August"; break;
-    case 9: Mm = "September"; break;
-    case 10: Mm = "Octomber"; break;
-    case 11: Mm = "November"; break;
-    case 12: Mm = "December"; break;
-    }
+    string Mm = month_select(month_new);
     cout << "The next workday is: " << Dy
-         << " " << Mm 
+         << " the " << d + offset << "th " << Mm 
          << " " << year_new <<  endl;
 }
 
@@ -280,8 +310,9 @@ void Date::week_of_year()
 int main()
 {
     try{
-        Date today(1643, jan, 4);
-        today.week_of_year();
+        Date today(1643, jan, 3);
+        today.daytoday();
+	    today.week_of_year();
         today.next_workday();
         return 0;
     }
