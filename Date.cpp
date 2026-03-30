@@ -115,48 +115,6 @@ int cent_code(int year)
     return -1;
 }
 
-Dd Date::day_name()
-{
-    int Yy = year_code(y);
-    int Mm = month_code(m);
-    int Cc = cent_code(y);
-    if (Yy == -1 || Mm == -1 || Cc == -1) error("Something went wrong!");
-    int sum = Yy/4 + Yy + Mm + Cc + d;
-    sum %= 7;
-    return Dd(sum);
-}
-
-Month operator+(Month& mon, int n)
-{
-    int temp = mon;
-    temp = temp + n;
-    if(temp > 12)
-    {
-        temp -= 12;
-        return Month(temp);
-    }
-    return Month(temp);
-}
-
-void Date::operator=(Date& date)
-{
-    d = date.day();
-    m = date.month();
-    y = date.year();
-}
-
-Date operator>>(istream& ist, Date& date)
-{
-    char symb1, symb2;
-    int y, temp, d;
-    ist >> y >> symb1 >> temp >> symb2 >> d;
-    if (symb1 != '/' || symb2 != '/') error("Wrong input layout, try again...");
-    Month m = Month(temp);
-    Date dtemp(y, m, d);
-    date = dtemp;
-    return date;
-}
-
 string day_select(int day_new)
 {
     string Dy = " ";
@@ -203,6 +161,48 @@ string label_select(int day)
         default: label = "th "; break;
     }
     return label;
+}
+
+Dd Date::day_name()
+{
+    int Yy = year_code(y);
+    int Mm = month_code(m);
+    int Cc = cent_code(y);
+    if (Yy == -1 || Mm == -1 || Cc == -1) error("Something went wrong!");
+    int sum = Yy/4 + Yy + Mm + Cc + d;
+    sum %= 7;
+    return Dd(sum);
+}
+
+Month operator+(Month& mon, int n)
+{
+    int temp = mon;
+    temp = temp + n;
+    if(temp > 12)
+    {
+        temp -= 12;
+        return Month(temp);
+    }
+    return Month(temp);
+}
+
+void Date::operator=(Date& date)
+{
+    d = date.day();
+    m = date.month();
+    y = date.year();
+}
+
+Date operator>>(istream& ist, Date& date)
+{
+    char symb1, symb2;
+    int y, temp, d;
+    ist >> y >> symb1 >> temp >> symb2 >> d;
+    if (symb1 != '/' || symb2 != '/') error("Wrong input layout, try again...");
+    Month m = Month(temp);
+    Date dtemp(y, m, d);
+    date = dtemp;
+    return date;
 }
 
 void Date::daytoday()
