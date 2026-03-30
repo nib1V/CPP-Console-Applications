@@ -11,11 +11,14 @@ enum Dd {
 class Date {
 public:
     Date(int yy, Month mm, int dd);
+    Date(){};
 
     int   day()   {return d;}
     Month month() {return m;}
     int   year()  {return y;}
     Dd   day_name();
+
+    void operator=(Date& d2);
 
     bool leap_year();
     int  month_code(int month);
@@ -32,6 +35,8 @@ private:
     Month m;
     int   d;
 };
+
+void interface(Date&);
 
 bool Date::has_30d()
 {
@@ -112,13 +117,10 @@ int cent_code(int year)
 
 Dd Date::day_name()
 {
-    //int day = ((d+m+y+21)%7) + 1;
-    //return Dd(day);
-    
     int Yy = year_code(y);
     int Mm = month_code(m);
     int Cc = cent_code(y);
-    if (Yy == -1 || Mm == -1 || Cc == -1) error("SOmething went wrong!");
+    if (Yy == -1 || Mm == -1 || Cc == -1) error("Something went wrong!");
     int sum = Yy/4 + Yy + Mm + Cc + d;
     sum %= 7;
     return Dd(sum);
@@ -134,6 +136,25 @@ Month operator+(Month& mon, int n)
         return Month(temp);
     }
     return Month(temp);
+}
+
+void Date::operator=(Date& date)
+{
+    d = date.day();
+    m = date.month();
+    y = date.year();
+}
+
+Date operator>>(istream& ist, Date& date)
+{
+    char symb1, symb2;
+    int y, temp, d;
+    ist >> y >> symb1 >> temp >> symb2 >> d;
+    if (symb1 != '/' || symb2 != '/') error("Wrong input layout, try again...");
+    Month m = Month(temp);
+    Date dtemp(y, m, d);
+    date = dtemp;
+    return date;
 }
 
 string day_select(int day_new)
@@ -168,15 +189,28 @@ string month_select(int month_new)
     case 11: Mm = "November"; break;
     case 12: Mm = "December"; break;
     }
-    return Mm;
-    
+    return Mm; 
 }
 
-void  Date::daytoday()
+string label_select(int day)
+{
+    string label = " ";
+    switch (day)
+    {
+        case 1: label = "st "; break;
+        case 2: label = "nd "; break;
+        case 3: label = "rd "; break;
+        default: label = "th "; break;
+    }
+    return label;
+}
+
+void Date::daytoday()
 {
     string Mm = month_select(m);
     string Dy = day_select(day_name());
-    cout << "Today is " << Dy << " the " << d << "th " << Mm << " of " << y << endl;
+    string label = label_select(d);
+    cout << "Today is " << Dy << " the " << d << label << "of " << Mm << " " << y << endl;
 }
 
 void Date::add_day(int n) 
@@ -187,7 +221,7 @@ void Date::add_day(int n)
         int temp = 0;
         if (n > 31) error("Too big of a number of days to add!");
         temp = (d + n)/30;
-        d = (d + n)%30;
+        d = ((d + n)%30 ? (d + n)%30 : 1);
         add_month(temp);
     }
     else if (has_31d()) 
@@ -195,7 +229,7 @@ void Date::add_day(int n)
         int temp = 0;
         if (n > 30) error("Too big of a number of days to add!");
         temp = (d + n)/31;
-        d = (d + n)%31;
+        d = ((d + n)%31 ? (d + n)%31 : 1);
         add_month(temp);
     }
     else
@@ -205,19 +239,19 @@ void Date::add_day(int n)
         if (!leap_year())
         {
             temp = (d + n)/28;
-            d = (d + n)%28;
+            d = ((d + n)%28 ? (d + n)%28 : 1);
             add_month(temp);
         }
         else
         {
             temp = (d + n)/29;
-            d = (d + n)%29;
+            d = ((d + n)%29 ? (d + n)%29 : 1);
             add_month(temp);
         }  
     }
 }
 
-void Date::add_month(int n) //works
+void Date::add_month(int n)
 {
     int temp1 = m;
     m = m + n;
@@ -228,7 +262,7 @@ void Date::add_month(int n) //works
     }
 }
 
-void Date::add_year(int n) //works
+void Date::add_year(int n)
 {
     y = y + n;
 }
@@ -281,10 +315,23 @@ void Date::next_workday()
         if (day_new == 1 || day_new == 0) error("Something went wrong...");
         Dy = day_select(day_new);
     }
+    Date temp(y, m, d);
+    temp.add_day(offset);
     string Mm = month_select(month_new);
-    cout << "The next workday is: " << Dy
-         << " the " << d + offset << "th " << Mm 
+    string label = " ";
+    label = label_select(temp.day());
+    if ((d + offset < 31 && has_30d()) || (d + offset < 32 && has_31d()))
+    {
+        cout << "The next workday is: " << Dy
+         << " the " << d + offset << label << "of " << Mm 
          << " " << year_new <<  endl;
+    }
+    else
+    {
+        cout << "The next workday is: " << Dy
+         << " the " << temp.day() << label << "of " << Mm 
+         << " " << year_new <<  endl;
+    }
 }
 
 void Date::week_of_year()
@@ -307,14 +354,96 @@ void Date::week_of_year()
     cout << "It is week " << n << " of the year!" << endl;
 }
 
+void input()
+{
+    cout << "Input the date you want below" << endl
+         << "(The correct format is yy/mm/dd): ";
+    Date date;
+    cin >> date;
+    if (cin.fail() || cin.bad()) error("Somthing went wrong while inputting the date...");
+    interface(date);
+}
+
+void interface(Date& date)
+{
+    while(1)
+    {
+        int sel;
+        cout << "Select what you want to do with your date:" << endl
+            << "1. Print the current Date" << endl
+            << "2. Print the week of the year" << endl
+            << "3. Print the Date of the next workday" << endl
+            << "4. Enter new date" << endl
+            << "5. Add n days to your current date" << endl
+            << "6. Add n months to your current date" << endl
+            << "7. Add n years to your current date" << endl
+            << "8. Exit" << endl
+            << "Enter an interger followed by ENTER: ";
+        cin >> sel;
+        cout << endl;
+        if (sel == 1) 
+        {
+            date.daytoday();
+            cout << endl;
+        }
+        else if (sel == 2)
+        {
+            date.week_of_year();
+            cout << endl;
+        }
+        else if (sel == 3)
+        {
+            date.next_workday();
+            cout << endl;
+
+        } 
+        else if (sel == 4)
+        {
+            input();
+        }
+        else if (sel == 5)
+        {
+            int n = 0;
+            cout << endl << "Enter the ammount of days you want to add" << endl
+                 << "(It has to be a number between 1 and 31 according to the month): ";
+            cin >> n;
+            date.add_day(n);
+            cout << endl;
+        }
+        else if (sel == 6)
+        {
+            int n = 0;
+            cout << endl << "Enter the ammount of months you want to add: ";
+            cin >> n;
+            cout << endl;
+            date.add_month(n);
+            cout << endl;
+        }
+        else if (sel == 7)
+        {
+            int n = 0;
+            cout << endl << "Enter the ammount of years you want to add ";
+            cin >> n;
+            cout << endl;
+            date.add_year(n);
+            cout << endl;
+        }
+        else if (sel == 8)
+        {
+            exit(0);
+        }
+        else
+        {
+            error("Unexpected input, try again...");
+        }
+    }
+}
+
 int main()
 {
-    try{
-        Date today(1643, jan, 3);
-        today.daytoday();
-	    today.week_of_year();
-        today.next_workday();
-        return 0;
+    try
+    {
+        input();
     }
     catch(exception& e)
     {
@@ -325,3 +454,5 @@ int main()
         cerr << "Something went wrong and the app had to be shut down.." << endl;
     }
 }
+
+//Adding comments soon...
