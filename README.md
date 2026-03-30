@@ -38,6 +38,7 @@ Then using that date you can apply one of the many function that i have created 
 - add_year()
 - next_workday()
 - week_of_year()
+- day_today()
 - has_30d()
   - Helper Function that returns a boolean value to check if that month has 30 days.
 - has_31d()
@@ -51,7 +52,11 @@ Then using that date you can apply one of the many function that i have created 
 - month_code()
   - Used for the day_name() algorithm
 - cent_code()
-  - Used for the day_name() algorithm</br>
+  - Used for the day_name() algorithm
+- month_select()
+  - Used to return a string for the corrisponding month
+- day_select()
+  - Used to return a string to the corrisponding day</br>
 
 These are used more for the computation of day_name() and are based on a day name algorithm.<br/>
 The description of each function is going to be added later on..(In a later version).
