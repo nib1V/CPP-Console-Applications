@@ -61,3 +61,15 @@ Then using that date you can apply one of the many function that i have created 
 These are used more for the computation of day_name() and are based on a day name algorithm.<br/>
 The description of each function is going to be added later on..(In a later version).
 
+3. **Reverse.cpp**
+
+Takes a ".txt" file as input and reverses its contents placing them back into the file from last to first. <br/>
+The name of the input file has to be "Rinput.txt" except if changed by the user. <br/>
+Will be used it the future as part of a bigger program alongside other smaller programs in this repository. <br/>
+
+4. **FCnS.cpp** (File Connect and Sort)
+
+Takes two input files with the names "input1.txt" and "input2.txt" (which can be changed by the user) <br/>
+and using the words inside each one of them, the program creates a new file by the name "newfile.txt". <br/>
+This file will contain all the words inside the two input files and will sort them alphabetically. <br/>
+Will be used it the future as part of a bigger program alongside other smaller programs in this repository. <br/>
