@@ -193,7 +193,7 @@ void Date::operator=(Date& date)
     y = date.year();
 }
 
-Date operator>>(istream& ist, Date& date)                                      //Overloading the '>>' operator in order to have custom inputs
+istream& operator>>(istream& ist, Date& date)                                      //Overloading the '>>' operator in order to have custom inputs
 {
     char symb1, symb2;                                                         //The symbols here are going to be used to seperate the year month and day
     int y, temp, d;
@@ -202,7 +202,7 @@ Date operator>>(istream& ist, Date& date)                                      /
     Month m = Month(temp);                                                          //Making the int into a Month enumeration
     Date dtemp(y, m, d);                                                       //Initializing a "dummy" object in order to copy its contents to date
     date = dtemp;
-    return date;
+    return ist;
 }
 
 void Date::daytoday()                                                            //Function that prints the current date.
