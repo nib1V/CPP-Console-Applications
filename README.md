@@ -29,8 +29,16 @@ The Helper Functions go as follows:
 </br>
 <br/>
 
-2. **Date.cpp**
+2. **Date.cpp**         --------         **DoomsDayAlgo.cpp**
 
+_Both of the above files work as calendar apps with the Date.cpp being the more complete as far as_ <br/>
+_interface goes, while the DoomsDayAlgo.cpp is more algorithmically correct and gives the correct day_ <br/>
+_most of the time compared to the inconsistency of the other one._ <br/>
+
+_DoomsDayAlgo.cpp is getting a future update probably by being connected to the Date.cpp file or as_ <br/>
+_an entire new file by itself..._ <br/> 
+
+Date.cpp:<br/>
 Takes as input from the code (since i have no interface yet) a date inputted by the user.<br/>
 Then using that date you can apply one of the many function that i have created as follows:
 - add_day()
