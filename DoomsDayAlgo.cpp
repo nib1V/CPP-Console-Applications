@@ -57,7 +57,7 @@ string month_select(int month_new)                                             /
     case 7: Mm = "July"; break;
     case 8: Mm = "August"; break;
     case 9: Mm = "September"; break;
-    case 10: Mm = "Octomber"; break;
+    case 10: Mm = "October"; break;
     case 11: Mm = "November"; break;
     case 12: Mm = "December"; break;
     }
@@ -144,10 +144,14 @@ int AnchorDay(int year)
     int tmp1 = year / 100;
     double tmp2 = double(tmp1) * 100;
     tmp2 /= 400;
-    if ( remainder(tmp2, 1.0) == 0.25 || remainder(tmp2, 1.0) == -0.75) return sun; //IEEE 754 standard
+
+    //Due to the remainder function following the IEE 754 standard i had to include
+    //the negative values of each one of the possible results
+
+    if ( remainder(tmp2, 1.0) == 0.25 || remainder(tmp2, 1.0) == -0.75) return sun;
     if ( remainder(tmp2, 1.0) == 0) return tue;
-    if ( remainder(tmp2, 1.0) == 0.75 || remainder(tmp2, 1.0) == -0.25) return wen; //IEEE 754 standard
-    if ( remainder(tmp2, 1.0) == 0.50 || remainder(tmp2, 1.0) == -0.5) return fri;  //IEEE 754 standard
+    if ( remainder(tmp2, 1.0) == 0.75 || remainder(tmp2, 1.0) == -0.25) return wen;
+    if ( remainder(tmp2, 1.0) == 0.50 || remainder(tmp2, 1.0) == -0.5) return fri; 
     return -1;
 }
 
@@ -183,9 +187,9 @@ void DateCalc(Date d)
     int date = Doomsdate(d);
     int dis = abs(d.day() - date);
     dis = dis / 7;
-    date += 7 * dis;
     if (d.day() > date )
     {
+        date += 7 * dis;
         int diff = d.day() - date;
         if (doomsday + diff > 6)
         {
@@ -200,6 +204,7 @@ void DateCalc(Date d)
     }
     else 
     {
+        date -= 7 * dis;
         int diff = date - d.day();
         if (doomsday - diff < 0)
         {
